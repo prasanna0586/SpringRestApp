@@ -1,0 +1,8 @@
+package com.spring.arithmetic.controller;
+
+
+
+@Controller
+public class ArithmeticController {
+
+}

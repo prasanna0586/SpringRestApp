@@ -1,0 +1,66 @@
+package com.spring.arithmetic.controller;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import com.spring.arithmetic.model.ArithmeticModel;
+
+
+
+@Controller
+public class ArithmeticController {
+	
+	@RequestMapping(value = "/sum", method = RequestMethod.GET)
+	public ModelAndView sum (@RequestParam Map<String, String> requestParams) {
+		String URL = "http://192.168.7.53:81/RestSampleApplication/rest/arithmetic";
+		
+		ArithmeticModel model = new ArithmeticModel();
+		HttpHeaders headers = addHttpHeaders();
+		List<Float> listOfNumbers = new ArrayList<Float>();
+		listOfNumbers.add(new Float(requestParams.get("firstNumber")));
+		listOfNumbers.add(new Float(requestParams.get("secondNumber")));		
+		model.setInput(listOfNumbers);
+		
+		UriComponentsBuilder uriBuilder = buildURLWithQueryParams(URL, listOfNumbers);
+		
+		HttpMessageConverter<?> converter = new StringHttpMessageConverter();
+		List<HttpMessageConverter<?>> listOfMessageConverters = new ArrayList<HttpMessageConverter<?>>();
+		listOfMessageConverters.add(converter);
+		
+		RestTemplate restTemplate = new RestTemplate();
+		restTemplate.setMessageConverters(listOfMessageConverters);
+		HttpEntity<String> requestEntity = new HttpEntity<String>("parameters", headers);
+		ResponseEntity<String> responseEntity = restTemplate.exchange(uriBuilder.build().toUriString(), HttpMethod.GET, requestEntity, String.class);		
+		model.setResult(new Float(responseEntity.getBody()));
+		return new ModelAndView("home", "arithmeticModel", model);
+	}
+	
+	private static UriComponentsBuilder buildURLWithQueryParams(String URL, List<Float> listOfNumbers) {
+		return UriComponentsBuilder.fromHttpUrl(URL)
+		.queryParam("listOfNumbers", listOfNumbers.get(0))
+		.queryParam("listOfNumbers", listOfNumbers.get(1));
+	}
+	
+	private static HttpHeaders addHttpHeaders() {
+		HttpHeaders head = new HttpHeaders();
+		head.setContentType(MediaType.TEXT_PLAIN);   
+		head.set("Authorization", "Basic d2Vic2VydmljZXVzZXI6Q2hlbHNlYWZjQDA1ODY=");
+		return head;
+	}
+}

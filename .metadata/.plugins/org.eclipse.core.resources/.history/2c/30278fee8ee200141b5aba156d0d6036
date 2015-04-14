@@ -1,0 +1,49 @@
+package com.spring.arithmetic.controller;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.spring.arithmetic.model.ArithmeticModel;
+
+
+
+@Controller
+public class ArithmeticController {
+	
+	@RequestMapping("/sum")
+	public ModelAndView sum (@RequestParam Map<String, Float> requestParams) {
+		System.out.println("requestParams " + requestParams);
+		List<Float> listOfNumbers = new ArrayList<Float>();
+		listOfNumbers.add(requestParams.get("firstNumber"));
+		listOfNumbers.add(requestParams.get("secondNumber"));
+		String URL = "http://192.168.7.53:81/RestSampleApplication/rest/message";
+		RestTemplate restTemplate = new RestTemplate();
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.TEXT_PLAIN);   
+		headers.set("Authorization", "Basic d2Vic2VydmljZXVzZXI6Q2hlbHNlYWZjQDA1ODY=");
+		HttpEntity<String> requestEntity = new HttpEntity<String>("parameters", headers);
+		ResponseEntity<Float> responseEntity = restTemplate.exchange(URL, HttpMethod.GET, requestEntity, Float.class);
+		System.out.println("responseEntity " + responseEntity);
+		/*HttpEntity entity = new HttpEn
+		HttpEntity<MultiValueMap<String, String>> request = 
+				new HttpEntity<MultiValueMap<String, String>>(map, headers);
+		System.out.println("request.getHeaders " + request.getHeaders().toString());
+		ResponseEntity<Float> response = restTemplate.exchange(URL, HttpMethod.GET, request, Float.class);
+		System.out.println("response.getHeaders() " + response.getHeaders());*/
+		ArithmeticModel model = new ArithmeticModel();
+		//model.setResult(response);
+		return new ModelAndView("home", "ArithmeticModel", model);
+	}
+}

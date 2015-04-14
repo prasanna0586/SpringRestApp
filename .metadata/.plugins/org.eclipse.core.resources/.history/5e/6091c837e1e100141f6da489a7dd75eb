@@ -1,0 +1,8 @@
+package com.spring.arithmetic.controller;
+
+
+
+@org.springframework.stereotype.Controller
+public class ArithmeticController {
+
+}

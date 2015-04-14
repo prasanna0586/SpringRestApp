@@ -1,0 +1,29 @@
+package com.spring.arithmetic.controller;
+
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.stereotype.Controller;
+import org.springframework.util.MultiValueMap;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.ws.rs.core.MultivaluedMap;
+
+
+
+@Controller
+public class ArithmeticController {
+	
+	@RequestMapping("/sum")
+	public ModelAndView sum () {
+		MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
+		map.add("Authorization", "Basic d2Vic2VydmljZXVzZXI6Q2hlbHNlYWZjQDA1ODY=");
+		map.add("password", password); 
+		RestTemplate restTemplate = new RestTemplate();
+	}
+
+}

@@ -1,0 +1,42 @@
+package com.spring.arithmetic.controller;
+
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.spring.arithmetic.model.ArithmeticModel;
+
+
+
+@Controller
+public class ArithmeticController {
+	
+	@RequestMapping("/sum")
+	public ModelAndView sum () {
+		String URL = "http://192.168.7.53:81/RestSampleApplication/rest/message";
+		MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
+		//map.add("Authorization", "Basic d2Vic2VydmljZXVzZXI6Q2hlbHNlYWZjQDA1ODY=");
+		RestTemplate restTemplate = new RestTemplate();
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.TEXT_PLAIN);   
+		headers.set("Authorization", "Basic d2Vic2VydmljZXVzZXI6Q2hlbHNlYWZjQDA1ODY=");
+		HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
+		/*HttpEntity entity = new HttpEn
+		HttpEntity<MultiValueMap<String, String>> request = 
+				new HttpEntity<MultiValueMap<String, String>>(map, headers);
+		System.out.println("request.getHeaders " + request.getHeaders().toString());
+		ResponseEntity<Float> response = restTemplate.exchange(URL, HttpMethod.GET, request, Float.class);
+		System.out.println("response.getHeaders() " + response.getHeaders());*/
+		ArithmeticModel model = new ArithmeticModel();
+		//model.setResult(response);
+		return new ModelAndView("home", "ArithmeticModel", model);
+	}
+}

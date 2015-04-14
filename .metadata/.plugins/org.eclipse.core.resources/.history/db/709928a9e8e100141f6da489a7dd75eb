@@ -1,0 +1,5 @@
+package com.spring.arithmetic.model;
+
+public class ArithmeticModel {
+
+}

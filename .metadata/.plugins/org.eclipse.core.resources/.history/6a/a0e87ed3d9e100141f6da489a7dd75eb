@@ -1,0 +1,7 @@
+package com.spring.arithmetic.controller;
+
+import org.springframework.
+@Controller
+public class ArithmeticController {
+
+}
